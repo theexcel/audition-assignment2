@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLList, GraphQLBoolean, GraphQLString, GraphQLInt } from "graphql";
+import { data } from "./data";
 
 const TaskType = new GraphQLObjectType({
     name: 'Task',
@@ -26,7 +27,7 @@ const RootQuery = new GraphQLObjectType({
         categories: {
             type: new GraphQLList(CategoryType),
             resolve(){
-                return []
+                return data
             }
         }
     }
