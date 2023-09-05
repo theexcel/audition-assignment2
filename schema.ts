@@ -33,9 +33,45 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
+const RootMutation = new GraphQLObjectType({
+    name: 'RootMutation',
+    fields: {
+        updateTask: {
+            type: TaskType,
+            args: {
+                id: {type: GraphQLInt},
+                checked: {type: GraphQLBoolean},
+                closed: {type: GraphQLBoolean},
+            },
+            resolve(parent, args){
+                const {id, checked, closed} = args;
+                const taskToUpdate = findTaskById(id);
+
+                if(!taskToUpdate){
+                    throw new Error(`Task with ID ${id} not found`)
+                }
+                console.log('hello')
+                taskToUpdate.checked = checked;
+                taskToUpdate.closed = closed;
+                return taskToUpdate;
+            }
+        }
+    }
+})
+
+function findTaskById(id: number) {
+    for (const category of data) {
+      const task = category.tasks.find((task) => task.id === id);
+      if (task) {
+        return task;
+      }
+    }
+    return null; // Task not found
+  }
 
 const schema = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: RootMutation
 });
 
 export default schema;
